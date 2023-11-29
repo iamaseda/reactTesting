@@ -149,7 +149,7 @@ async function activateWebXR(scene) {
         }
 
         if (placementIndicator) {
-          if (itemState == 0) {
+          if (itemState === 0) {
             hitpoint = results[0];
             let quat = placementIndicator.rotationQuaternion;
             hitpoint.transformationMatrix.decompose(placementIndicator.scaling, quat, placementIndicator.position);
