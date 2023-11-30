@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import * as React from "react";
 import Button from '@mui/material/Button';
@@ -11,51 +11,49 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import { purple, red } from '@mui/material/colors';
-import { ColorPicker } from "material-ui-color";
-import { PaletteGenerator } from "material-ui-color";
+// import { purple, red } from '@mui/material/colors';
 
 
 import { FC, useState } from 'react';
 import { useEffect, useRef } from "react";
 import * as BABYLON from 'babylonjs';
 import { WebXRSessionManager, 
-  WebXRTrackingState, 
-  WebXRFeatureName, 
-  WebXRFeaturesManager,
-  WebXRExperienceHelper,
-  WebXRCamera,
+  // WebXRTrackingState, 
+  // WebXRFeatureName, 
+  // WebXRFeaturesManager,
+  // WebXRExperienceHelper,
+  // WebXRCamera,
   WebXRHitTest,
-  WebXRState,
-  WebXRPlaneDetector,
+  // WebXRState,
+  // WebXRPlaneDetector,
   WebXRAnchorSystem,
-  IWebXRHitResult
+  // IWebXRHitResult
  } from '@babylonjs/core/XR';
  import {
-  AbstractMesh,
-  Axis,
+  // AbstractMesh,
+  // Axis,
   Color3,
-  Engine,
-  HemisphericLight,
+  // Engine,
+  // HemisphericLight,
   MeshBuilder,
-  Mesh,
-  PointLight,
-  PolygonMeshBuilder,
-  PointerEventTypes,
-  Scene,
-  Space,
+  // Mesh,
+  // PointLight,
+  // PolygonMeshBuilder,
+  // PointerEventTypes,
+  // Scene,
+  // Space,
   StandardMaterial,
-  FreeCamera,
-  SceneLoader, 
-  ExtrudeShapeCustom,
-  TransformNode
+  // FreeCamera,
+  // SceneLoader, 
+  // ExtrudeShapeCustom,
+  // TransformNode
 } from '@babylonjs/core';
 
 import '@babylonjs/loaders/glTF';
-import earcut from 'earcut';
+// import earcut from 'earcut';
 
 import { Quaternion, Vector3, Vector2 } from '@babylonjs/core/Maths/math.vector';
-import {ArcRotateCamera} from '@babylonjs/core/Cameras/arcRotateCamera';
+// import {ArcRotateCamera} from '@babylonjs/core/Cameras/arcRotateCamera';
 
 let item;
 let item2;
