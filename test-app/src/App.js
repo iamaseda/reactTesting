@@ -1,3 +1,6 @@
+/**
+ * Created by Aseda Asomami
+ */
 // import logo from './logo.svg';
 import './App.css';
 import * as React from "react";
@@ -13,13 +16,32 @@ import Checkbox from '@mui/material/Checkbox';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-
 import { useState } from 'react';
 import '@babylonjs/loaders/glTF';
 
 import { FreeCamera, Vector3, HemisphericLight, MeshBuilder } from "@babylonjs/core";
 import SceneComponent from "./SceneComponent"; // uses above component in same directory
 // import SceneComponent from 'babylonjs-hook'; // if you install 'babylonjs-hook' NPM.
+import { Engine } from "@babylonjs/core/Engines/engine";
+import { Scene } from "@babylonjs/core/scene";
+import { Mesh } from "@babylonjs/core/Meshes/mesh";
+import { Color3 } from "@babylonjs/core/Maths/math";
+import { Vector2 } from "@babylonjs/core/Maths/math";
+import { Color4 } from "@babylonjs/core/Maths/math";
+import { UniversalCamera } from "@babylonjs/core/Cameras/universalCamera";
+import { DirectionalLight } from "@babylonjs/core/Lights/directionalLight";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
+import { Control } from "@babylonjs/gui/2D/controls";
+import { StackPanel } from "@babylonjs/gui/2D/controls";
+import { IShadowLight } from "@babylonjs/core";
+import { Scalar } from "@babylonjs/core";
+import { AdvancedDynamicTexture } from "@babylonjs/gui/2D/advancedDynamicTexture";
+
+import TileSet from "babylonjs-mapping";
+import PropertyGUI from "./propertyGUI";
+import FancyBuildings from "./fancyBuildings";
+import { ProjectionType } from "babylonjs-mapping/lib/TileMath";
+import BuildingsCustom from "babylonjs-mapping/lib/BuildingsCustom";
 
 
 let item;
@@ -246,7 +268,7 @@ function App() {
         <MenuItem onClick={handleClose1}>My account</MenuItem>
         <MenuItem onClick={handleClose1}>Logout</MenuItem>
       </Menu>
-      <Button variant="contained" color="ochre">Test</Button>
+      <Button variant="contained" color="ochre">Test Button</Button>
         </Box>
         </ThemeProvider>
         </div>
@@ -313,8 +335,9 @@ function App() {
         </FormGroup>
         )}
         </div>
-        <br></br>
-        <SceneComponent antialias canvasWidth={1000} canvasHeight={600} onSceneReady={onSceneReady} onRender={onRender} id="my-canvas" />
+        <div className='right'>
+        <SceneComponent className="BabylonScene" float="right" antialias onSceneReady={onSceneReady} onRender={onRender} id="my-canvas" />
+        </div>
         </div>
         {/* {['left', 'right', 'top', 'bottom '].map((anchor) => (
         <React.Fragment key={anchor}>

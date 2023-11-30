@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babylonjs/gui": "^6.31.0",
     "@babylonjs/loaders": "^6.31.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -13,6 +14,7 @@
     "babylonjs": "^6.31.0",
     "babylonjs-hook": "^0.1.1",
     "babylonjs-loaders": "^6.31.0",
+    "babylonjs-mapping": "^1.1.7",
     "earcut": "^2.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
