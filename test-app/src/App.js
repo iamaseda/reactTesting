@@ -361,18 +361,18 @@ function App() {
     <div className="App">
       <header className="App-header" style={{ textAlign: 'left' }}>
         {/* <img src={logo} width={100} height={100} className="App-logo" alt="logo" /> */}
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
+
+        {/* <a
           className="App-link"
           href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
           Learn React!!!
-        </a>
-        <br></br>
+        </a> */}
+        <h1>
+          City Explorer
+        </h1>
         
       <Box
           m={1}//margin
@@ -407,7 +407,7 @@ function App() {
         open={open1}
         onClose={handleClose1}
         anchorOrigin={{
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'left',
         }}
         transformOrigin={{
@@ -427,7 +427,7 @@ function App() {
           open={open2}
           onClose={handleClose2}
           anchorOrigin={{
-            vertical: 'top',
+            vertical: 'bottom',
             horizontal: 'left',
           }}
           transformOrigin={{
