@@ -15,7 +15,8 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 20vh;
+  max-height: 200px; /* set the height of the header to 100 pixels */
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -36,4 +37,13 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.hstack {
+  display: flex;
+}
+
+.vstack {
+  display: flex;
+  flex-direction: column;
 }

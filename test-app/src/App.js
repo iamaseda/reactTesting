@@ -11,49 +11,16 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import ButtonGroup from '@mui/material/ButtonGroup';
-// import { purple, red } from '@mui/material/colors';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
-import { FC, useState } from 'react';
-import { useEffect, useRef } from "react";
-import * as BABYLON from 'babylonjs';
-import { WebXRSessionManager, 
-  // WebXRTrackingState, 
-  // WebXRFeatureName, 
-  // WebXRFeaturesManager,
-  // WebXRExperienceHelper,
-  // WebXRCamera,
-  WebXRHitTest,
-  // WebXRState,
-  // WebXRPlaneDetector,
-  WebXRAnchorSystem,
-  // IWebXRHitResult
- } from '@babylonjs/core/XR';
- import {
-  // AbstractMesh,
-  // Axis,
-  Color3,
-  // Engine,
-  // HemisphericLight,
-  MeshBuilder,
-  // Mesh,
-  // PointLight,
-  // PolygonMeshBuilder,
-  // PointerEventTypes,
-  // Scene,
-  // Space,
-  StandardMaterial,
-  // FreeCamera,
-  // SceneLoader, 
-  // ExtrudeShapeCustom,
-  // TransformNode
-} from '@babylonjs/core';
-
+import { useState } from 'react';
 import '@babylonjs/loaders/glTF';
-// import earcut from 'earcut';
 
-import { Quaternion, Vector3, Vector2 } from '@babylonjs/core/Maths/math.vector';
-// import {ArcRotateCamera} from '@babylonjs/core/Cameras/arcRotateCamera';
+import { FreeCamera, Vector3, HemisphericLight, MeshBuilder } from "@babylonjs/core";
+import SceneComponent from "./SceneComponent"; // uses above component in same directory
+// import SceneComponent from 'babylonjs-hook'; // if you install 'babylonjs-hook' NPM.
+
 
 let item;
 let item2;
@@ -63,208 +30,64 @@ var itemState = 0;
 var itemRotation = 0.0;
 let pivot;
 
-const loadmodel = async (scene) => {
-
-  const model = await BABYLON.SceneLoader.ImportMeshAsync("", "https://bafybeibyoumttavsexltkqbcbkkae6rgm46a6mijdahzwp6yclkzeuecia.ipfs.nftstorage.link/","toolbox.glb" , scene);
-
-  // const model = await BABYLON.SceneLoader.ImportMeshAsync("", "https://nftstorage.link/ipfs/bafybeibyoumttavsexltkqbcbkkae6rgm46a6mijdahzwp6yclkzeuecia/","toolbox.glb" , scene);
-  // const model = await BABYLON.SceneLoader.ImportMeshAsync("", "https://gateway.pinata.cloud/ipfs/QmSmaEnrPWZoos4SH9btG2xe3osrgMwmyac4h2n7xcWeNa/","toolbox.glb" , scene);
-  // const model = await BABYLON.SceneLoader.ImportMeshAsync("", "https://siegfriedschaefer.github.io/rn-babylonjs-pg/assets/", "toolbox.glb", scene);
-
-  item = model.meshes[0];
-  item.name = "Toolbox";
-  item2 = model.meshes[1];
-  item3 = model.meshes[2];
-
-  item.setEnabled(false);
-  item.scaling.scaleInPlace(0.2);
-
-  /*
-  // load animations from glTF
-  const fanRunning = scene.getAnimationGroupByName("fanRunning");
-
-  // Stop all animations to make sure the asset is ready
-  scene.stopAllAnimations();
-  
-  // run the fanRunning animation
-  if (fanRunning !== null)
-    fanRunning.start(true);
-  */
-};
-
-
-// import { FreeCamera, Vector3, HemisphericLight, MeshBuilder } from "@babylonjs/core";
-// import SceneComponent from "./SceneComponent"; // uses above component in same directory
-// import SceneComponent from 'babylonjs-hook'; // if you install 'babylonjs-hook' NPM.
-
-async function activateWebXR(scene) {
-  let placementIndicator;
-  var modelPlaced = false;
-  var hitpoint;
-
-  const sessionManager = new WebXRSessionManager(scene);
-  const supported = await sessionManager.isSessionSupportedAsync('immersive-ar');
-  if (!supported) {
-    return;
-  }
-
-  try {
-    const xr = await scene.createDefaultXRExperienceAsync({
-      uiOptions: {
-        sessionMode: "immersive-ar",
-      },
-      optionalFeatures: ["hit-test", "anchors", "unbounded"],
-    });
-
-    if (!xr.baseExperience) {
-      return;
-    }
-
-    loadmodel(scene);
-
-    const fm = xr.baseExperience.featuresManager;
-
-    const hitTest = fm.enableFeature(WebXRHitTest, 'latest');
-
-    placementIndicator = MeshBuilder.CreateTorus("torus", {
-      thickness: 0.01,
-      diameter: 0.1,
-      tessellation: 64
-    }, scene);
-    var indicatorMat = new StandardMaterial('noLight', scene);
-    indicatorMat.disableLighting = true;
-    indicatorMat.emissiveColor = Color3.White();
-    placementIndicator.material = indicatorMat;
-    placementIndicator.scaling = new Vector3(1, 0.01, 1);
-    placementIndicator.setEnabled(false);
-
-    hitTest.onHitTestResultObservable.add((results) => {
-      if (results.length) {
-        if (!modelPlaced) {
-          placementIndicator.setEnabled(true);
-        } else {
-          // Do something when model is placed
-        }
-
-        if (placementIndicator) {
-          if (itemState === 0) {
-            hitpoint = results[0];
-            let quat = placementIndicator.rotationQuaternion;
-            hitpoint.transformationMatrix.decompose(placementIndicator.scaling, quat, placementIndicator.position);
-            placementIndicator.position = results[0].position;
-          }
-          // Do something else
-        }
-      } else {
-        placementIndicator.setEnabled(false);
-      }
-    });
-
-    const anchorSystem = fm.enableFeature(WebXRAnchorSystem, 'latest');
-
-    if (anchorSystem) {
-      anchorSystem.onAnchorAddedObservable.add(webxranchor => {
-        let anchor = webxranchor;
-        if (item !== undefined) {
-          // Do something with the anchor
-        }
-      });
-
-      anchorSystem.onAnchorRemovedObservable.add(webxranchor => {
-        let anchor = webxranchor;
-        if (anchor) {
-          // Do something when anchor is removed
-        }
-      });
-    }
-
-    scene.onBeforeRenderObservable.add(() => {
-      if (item !== undefined) {
-        // Do something before rendering
-      }
-    });
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-function createScene(engine, canvas) {
-  // Create the scene space
-  var scene = new BABYLON.Scene(engine);
-  scene.createDefaultEnvironment({ createGround: false, createSkybox: false });
-
-  // Add a camera to the scene and attach it to the canvas
-  var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 2, -10), scene);
-  camera.setTarget(BABYLON.Vector3.Zero());
-
-  camera.attachControl(canvas, true);
-
-  // Add lights to the scene
-  var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 3, 0), scene);
-
-  activateWebXR(scene);
-
-  return scene;
-}
-
-
-function BabylonView() {
-  const [xrScene, setXrScene] = useState();
-  const [xrEngine, setXrEngine] = useState();
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (canvas === null) return;
-
-    // Fullpage support
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const engine = new BABYLON.Engine(canvas, true);
-    setXrEngine(engine);
-
-    var scene;
-
-    scene = createScene(engine, canvas);
-
-    // Register a render loop to repeatedly render the scene
-    engine.runRenderLoop(function () {
-      scene.render();
-    });
-    setXrScene(scene);
-
-    // Watch for browser/canvas resize events
-    window.addEventListener("resize", function () {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      engine.resize();
-    });
-  }, []);
-
-  const onToggleXR = () => {
-    if (xrScene !== undefined) {
-      // xrScene.getEngine().switchFullscreen(false);
-    }
-  }
-
-  return (
-    <>
-      <button className="btn btn-primary" onClick={onToggleXR}>
-        XR On/Off
-      </button>
-      <canvas id="renderCanvas" width="100%" height="100%" ref={canvasRef} style={{ flex: 1 }} />
-    </>
-  );
-}
-
 const buttonStyles = {
   backgroundColor: 'black', // Set the background color you desire
   color: 'white', // Set the text color
 };
 
+/** Colors for buttons and other styling will be stored below */
+const theme = createTheme({
+  palette: {
+    ochre: {
+      main: '#000000',
+      contrastText: '#FFFFFF',
+    },
+  },
+});
 
+/**
+ * The next two const variables store the code for rendering a babylonjs scene component
+ */
+let box;
+const onSceneReady = (scene) => {
+  // This creates and positions a free camera (non-mesh)
+  const camera = new FreeCamera("camera1", new Vector3(0, 5, -10), scene);
 
+  // This targets the camera to scene origin
+  camera.setTarget(Vector3.Zero());
+
+  const canvas = scene.getEngine().getRenderingCanvas();
+
+  // This attaches the camera to the canvas
+  camera.attachControl(canvas, true);
+
+  // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+  const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
+
+  // Default intensity is 1. Let's dim the light a small amount
+  light.intensity = 0.7;
+
+  // Our built-in 'box' shape.
+  box = MeshBuilder.CreateBox("box", { size: 2 }, scene);
+
+  // Move the box upward 1/2 its height
+  box.position.y = 1;
+
+  // Our built-in 'ground' shape.
+  MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+};
+
+/**
+ * Will run on every frame render.  We are spinning the box on y-axis.
+ */
+const onRender = (scene) => {
+  if (box !== undefined) {
+    const deltaTimeInMillis = scene.getEngine().getDeltaTime();
+
+    const rpm = 10;
+    box.rotation.y += (rpm / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000);
+  }
+};
 
 function App() {
 
@@ -359,7 +182,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header" style={{ textAlign: 'left' }}>
+      <header className="App-header" >
         {/* <img src={logo} width={100} height={100} className="App-logo" alt="logo" /> */}
 
         {/* <a
@@ -373,7 +196,9 @@ function App() {
         <h1>
           City Explorer
         </h1>
-        
+      </header>
+      <div className='vstack'>
+      <ThemeProvider theme={theme}>
       <Box
           m={1}//margin
           display="flex"
@@ -388,6 +213,7 @@ function App() {
          aria-haspopup="true"
          aria-expanded={open2 ? 'true' : undefined}
          onClick={handleClick2}
+         variant="outlined" 
          >
           SideMenu
         </Button>
@@ -397,6 +223,7 @@ function App() {
         aria-haspopup="true"
         aria-expanded={open1 ? 'true' : undefined}
         onClick={handleClick1}
+        
       >
         Dashboard
       </Button>
@@ -419,7 +246,13 @@ function App() {
         <MenuItem onClick={handleClose1}>My account</MenuItem>
         <MenuItem onClick={handleClose1}>Logout</MenuItem>
       </Menu>
+      <Button variant="contained" color="ochre">Test</Button>
         </Box>
+        </ThemeProvider>
+        </div>
+        <br></br>
+        <div className='hstack'>
+        <div className='vstack'>
         <Menu
           id="basic-menu"
           aria-labelledby="demo-positioned-button"
@@ -479,7 +312,10 @@ function App() {
           <FormControlLabel control={<Checkbox />} label="Shared" />
         </FormGroup>
         )}
-        
+        </div>
+        <br></br>
+        <SceneComponent antialias canvasWidth={1000} canvasHeight={600} onSceneReady={onSceneReady} onRender={onRender} id="my-canvas" />
+        </div>
         {/* {['left', 'right', 'top', 'bottom '].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
@@ -492,8 +328,6 @@ function App() {
           </Drawer>
         </React.Fragment>
       ))} */}
-      <BabylonView />
-      </header>
     </div>
   );
 }
