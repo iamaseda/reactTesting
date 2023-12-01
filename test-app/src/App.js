@@ -337,7 +337,7 @@ function App() {
         </div>
         <div className='right'>
         <SceneComponent className="BabylonScene" float="right" antialias onSceneReady={onSceneReady} onRender={onRender} id="my-canvas" />
-        </div>
+        </div>``
         </div>
         {/* {['left', 'right', 'top', 'bottom '].map((anchor) => (
         <React.Fragment key={anchor}>
